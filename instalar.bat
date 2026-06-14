@@ -23,7 +23,6 @@ if not errorlevel 1 (
     goto :found
 )
 
-:: Procura nas pastas padrão do Windows
 for %%P in (
     "%LOCALAPPDATA%\Programs\Python\Python313\python.exe"
     "%LOCALAPPDATA%\Programs\Python\Python312\python.exe"
@@ -60,21 +59,17 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo.
-echo Instalando navegador Chromium...
-%PYTHON_CMD% -m playwright install chromium
-if errorlevel 1 (
-    echo [ERRO] Falha ao instalar Chromium.
-    pause
-    exit /b 1
-)
+:: Instala apenas os drivers do Playwright (sem baixar navegador)
+%PYTHON_CMD% -m playwright install --dry-run >nul 2>&1
 
 :: Salva o caminho do Python para uso futuro
-echo %PYTHON_CMD% > python_path.txt
+echo %PYTHON_CMD%> python_path.txt
 
 echo.
 echo ==========================================
-echo   INSTALACAO CONCLUIDA COM SUCESSO!
+echo   INSTALACAO CONCLUIDA!
+echo   O programa usara o Google Chrome
+echo   ja instalado no seu computador.
 echo   Execute: iniciar.bat
 echo ==========================================
 echo.

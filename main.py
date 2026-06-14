@@ -82,8 +82,21 @@ def extrair_contatos():
         from playwright.sync_api import sync_playwright
 
         with sync_playwright() as p:
+            # Caminhos padrão do Chrome no Windows
+            chrome_paths = [
+                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+                os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"),
+            ]
+            chrome_exe = next((p for p in chrome_paths if os.path.exists(p)), None)
+
+            if not chrome_exe:
+                console.print("[red]❌ Chrome não encontrado! Instale o Google Chrome e tente novamente.[/red]")
+                return
+
             browser = p.chromium.launch(
                 headless=False,
+                executable_path=chrome_exe,
                 args=["--start-maximized"]
             )
             context = browser.new_context(
@@ -318,7 +331,22 @@ def disparar_mensagens():
         from playwright.sync_api import sync_playwright
 
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=False, args=["--start-maximized"])
+            chrome_paths = [
+                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+                os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"),
+            ]
+            chrome_exe = next((cp for cp in chrome_paths if os.path.exists(cp)), None)
+
+            if not chrome_exe:
+                console.print("[red]Chrome nao encontrado! Instale o Google Chrome.[/red]")
+                return
+
+            browser = p.chromium.launch(
+                headless=False,
+                executable_path=chrome_exe,
+                args=["--start-maximized"]
+            )
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
                 viewport={"width": 1280, "height": 800}
