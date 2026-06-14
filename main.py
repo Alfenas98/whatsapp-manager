@@ -71,7 +71,9 @@ def extrair_contatos():
     console.print()
 
     nome_grupo = Prompt.ask("[bold]Nome do arquivo de saída (sem extensão)[/bold]", default="contatos_grupo")
-    arquivo_saida = f"{nome_grupo}.xlsx"
+    pasta_downloads = Path.home() / "Downloads"
+    pasta_downloads.mkdir(exist_ok=True)
+    arquivo_saida = str(pasta_downloads / f"{nome_grupo}.xlsx")
 
     if not Confirm.ask(f"\nSalvar contatos em [green]{arquivo_saida}[/green]?"):
         return
